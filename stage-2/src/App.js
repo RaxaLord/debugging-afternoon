@@ -5,8 +5,8 @@ import ShoppingCart from "./Components/ShoppingCart/ShoppingCart";
 import NavBar from "./Components/NavBar/NavBar";
 
 class App extends Component {
-  constuctor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       products: [],
       cart: [],
@@ -16,27 +16,31 @@ class App extends Component {
     this.removeFromCart = this.removeFromCart.bind(this);
     this.navigate = this.navigate.bind(this);
   }
+
   componentDidMount() {
     axios
       .get("https://practiceapi.devmountain.com/products/")
       .then(response => {
         this.setState({
-          products: response
+          products: response.data
         });
       });
   }
+
   addToCart(item) {
     this.setState({
-      cart: item
+      cart: [...this.state.cart, item]
     });
   }
+
   removeFromCart(index) {
-    let cartCopy = this.state.products.slice();
+    let cartCopy = this.state.cart.slice();
     cartCopy.splice(index, 1);
     this.setState({
       cart: cartCopy
     });
   }
+
   navigate(location) {
     if (location === "cart") {
       this.setState({
@@ -48,6 +52,7 @@ class App extends Component {
       });
     }
   }
+
   render() {
     const { products, cart, showCart } = this.state;
     return (
